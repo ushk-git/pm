@@ -36,15 +36,25 @@ class Monitor:
         bus.write_byte(I2C_ADDR, low_bits & ~ENABLE)    
     
     def print(self, text):
-        text = text.ljust(LCD_WIDTH * 2)
-        self.lcd_send_byte(LCD_LINE_1, LCD_CMD)
-        for char in text[:LCD_WIDTH]:
-            self.lcd_send_byte(ord(char), LCD_CHR)
-        
-        self.lcd_send_byte(LCD_LINE_2, LCD_CMD)
-        for char in text[LCD_WIDTH:LCD_WIDTH*2]:
-            self.lcd_send_byte(ord(char), LCD_CHR)
+    	text = str(text)
     
+
+    	text = text[:LCD_WIDTH * 2]
+    
+   
+    	line_1 = text[:LCD_WIDTH]
+    	line_2 = text[LCD_WIDTH:]
+
+  
+    	self.lcd_send_byte(LCD_LINE_1, LCD_CMD)
+    	for char in line_1:
+        	self.lcd_send_byte(ord(char), LCD_CHR)
+
+   
+    	self.lcd_send_byte(LCD_LINE_2, LCD_CMD)
+    	for char in line_2:
+        	self.lcd_send_byte(ord(char), LCD_CHR)
+   
     def clear(self):
         self.lcd_send_byte(0x01, LCD_CMD)
         time.sleep(0.002)
